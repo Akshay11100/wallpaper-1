@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Material Depot — Wallpaper Order Line</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ground:#EFEEE9;
+  --panel:#FFFFFF;
+  --panel-2:#F7F6F2;
+  --ink:#17181A;
+  --ink-soft:#5E6166;
+  --ink-faint:#8B8D91;
+  --rule:#DAD8D1;
+  --rule-strong:#BFBCB2;
+  --cyan:#0E6E7D;
+  --cyan-wash:#E2F0F1;
+  --magenta:#A62B58;
+  --magenta-wash:#F7E6EB;
+  --ochre:#A97C10;
+  --ochre-wash:#F7EED8;
+  --pine:#2C6E49;
+  --pine-wash:#E3EFE7;
+  --shadow:0 1px 0 rgba(23,24,26,.06);
+  --radius:4px;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#121315;
+    --panel:#1B1C1F;
+    --panel-2:#212327;
+    --ink:#EDEDEA;
+    --ink-soft:#A3A5A9;
+    --ink-faint:#74767A;
+    --rule:#303236;
+    --rule-strong:#44474C;
+    --cyan:#5FC4D2;
+    --cyan-wash:#12312F;
+    --magenta:#EE8AA8;
+    --magenta-wash:#361420;
+    --ochre:#E0B44A;
+    --ochre-wash:#33290F;
+    --pine:#74C494;
+    --pine-wash:#122A1D;
+    --shadow:0 1px 0 rgba(0,0,0,.4);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#121315;
+  --panel:#1B1C1F;
+  --panel-2:#212327;
+  --ink:#EDEDEA;
+  --ink-soft:#A3A5A9;
+  --ink-faint:#74767A;
+  --rule:#303236;
+  --rule-strong:#44474C;
+  --cyan:#5FC4D2;
+  --cyan-wash:#12312F;
+  --magenta:#EE8AA8;
+  --magenta-wash:#361420;
+  --ochre:#E0B44A;
+  --ochre-wash:#33290F;
+  --pine:#74C494;
+  --pine-wash:#122A1D;
+  --shadow:0 1px 0 rgba(0,0,0,.4);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{ -webkit-text-size-adjust:100%; scroll-padding-top:env(safe-area-inset-top,0px); }
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"Archivo","Helvetica Neue",system-ui,-apple-system,sans-serif;
+  font-size:15px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.numeral{font-family:"Bricolage Grotesque","Archivo",system-ui,sans-serif;font-weight:700;letter-spacing:-.01em;margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px 72px}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  background:color-mix(in srgb, var(--ground) 88%, transparent);
+  backdrop-filter:saturate(1.4) blur(10px);
+  border-bottom:1px solid var(--rule);
+  padding-top:env(safe-area-inset-top,0px);
+}
+.topbar-in{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:10px;margin-right:auto;min-width:0}
+.brand b{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:17px;letter-spacing:-.02em;white-space:nowrap}
+.brand span{color:var(--ink-faint);font-size:12.5px;white-space:nowrap}
+.switch{display:flex;border:1px solid var(--rule-strong);border-radius:var(--radius);overflow:hidden}
+.switch button{background:transparent;border:0;padding:7px 14px;font-size:13.5px;font-weight:500;cursor:pointer;color:var(--ink-soft)}
+.switch button+button{border-left:1px solid var(--rule-strong)}
+.switch button[aria-pressed="true"]{background:var(--ink);color:var(--ground)}
+.whoami{font-size:12.5px;color:var(--ink-faint);display:flex;align-items:center;gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--pine);flex:none}
+.dot.ro{background:var(--ochre)}
+.dot.off{background:var(--magenta)}
+
+/* ---------- buttons ---------- */
+.btn{
+  border:1px solid var(--rule-strong);background:var(--panel);color:var(--ink);
+  padding:8px 14px;border-radius:var(--radius);cursor:pointer;font-size:14px;font-weight:500;
+}
+.btn:hover{border-color:var(--ink-soft)}
+.btn-primary{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.btn-primary:hover{opacity:.88}
+.btn-sm{padding:5px 10px;font-size:13px}
+.btn-danger{color:var(--magenta);border-color:var(--magenta)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* ---------- the rail (hero) ---------- */
+.rail-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding:30px 0 14px;flex-wrap:wrap}
+.rail-head h1{font-size:clamp(24px,3.4vw,34px);line-height:1.1}
+.rail-head p{margin:6px 0 0;color:var(--ink-soft);font-size:14px;max-width:56ch}
+.rail{
+  display:grid;grid-template-columns:repeat(6,1fr);
+  border:1px solid var(--rule-strong);border-radius:var(--radius);
+  background:var(--panel);overflow:hidden;box-shadow:var(--shadow);
+}
+.stage{
+  position:relative;border:0;border-right:1px solid var(--rule);background:transparent;
+  text-align:left;padding:14px 14px 16px;cursor:pointer;display:block;min-width:0;color:inherit;
+}
+.stage:last-child{border-right:0}
+.stage:hover{background:var(--panel-2)}
+.stage[aria-pressed="true"]{background:var(--ink)}
+.stage[aria-pressed="true"] *{color:var(--ground)!important}
+.stage .numeral{font-size:12px;color:var(--ink-faint);letter-spacing:.02em}
+.stage .nm{display:block;font-size:13px;font-weight:600;margin-top:2px;line-height:1.25}
+.stage .ct{display:block;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:28px;line-height:1;margin-top:10px;font-variant-numeric:tabular-nums}
+.stage .ct.zero{color:var(--ink-faint)}
+.stage .bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--rule)}
+.stage .bar i{display:block;height:100%;background:var(--cyan)}
+
+/* ---------- toolbar ---------- */
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:22px 0 12px}
+.search{flex:1 1 240px;position:relative;min-width:0}
+.search input{width:100%;padding:9px 12px;border:1px solid var(--rule-strong);border-radius:var(--radius);background:var(--panel)}
+.chip{
+  border:1px solid var(--rule-strong);background:var(--panel);color:var(--ink-soft);
+  padding:6px 11px;border-radius:99px;font-size:13px;cursor:pointer;white-space:nowrap;
+}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.chip.alert[aria-pressed="true"]{background:var(--magenta);border-color:var(--magenta);color:#fff}
+
+/* ---------- table ---------- */
+.panel{background:var(--panel);border:1px solid var(--rule-strong);border-radius:var(--radius);box-shadow:var(--shadow)}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{
+  text-align:left;font-weight:600;font-size:12px;color:var(--ink-faint);
+  padding:10px 14px;border-bottom:1px solid var(--rule);white-space:nowrap;
+}
+td{padding:12px 14px;border-bottom:1px solid var(--rule);vertical-align:top}
+tr:last-child td{border-bottom:0}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--panel-2)}
+.code{font-variant-numeric:tabular-nums;letter-spacing:.02em;font-weight:600}
+.sub{color:var(--ink-faint);font-size:12.5px;display:block;font-variant-numeric:tabular-nums}
+.tag{
+  display:inline-block;padding:3px 9px;border-radius:99px;font-size:12px;font-weight:600;
+  background:var(--panel-2);border:1px solid var(--rule-strong);white-space:nowrap;
+}
+.tag.s-cyan{background:var(--cyan-wash);border-color:transparent;color:var(--cyan)}
+.tag.s-ochre{background:var(--ochre-wash);border-color:transparent;color:var(--ochre)}
+.tag.s-magenta{background:var(--magenta-wash);border-color:transparent;color:var(--magenta)}
+.tag.s-pine{background:var(--pine-wash);border-color:transparent;color:var(--pine)}
+.aging{font-variant-numeric:tabular-nums;white-space:nowrap}
+.aging.hot{color:var(--magenta);font-weight:600}
+.flagdot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--magenta);margin-right:6px;vertical-align:middle}
+
+.empty{padding:56px 24px;text-align:center}
+.empty h3{font-size:19px;margin-bottom:6px}
+.empty p{color:var(--ink-soft);margin:0 auto 18px;max-width:44ch}
+
+/* ---------- detail ---------- */
+.crumb{display:flex;align-items:center;gap:12px;padding:22px 0 8px;flex-wrap:wrap}
+.crumb h2{font-size:clamp(20px,3vw,27px)}
+.detail{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:20px;align-items:start;margin-top:14px}
+.card{background:var(--panel);border:1px solid var(--rule-strong);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:16px}
+.card h3{font-size:14px;padding:13px 16px;border-bottom:1px solid var(--rule);font-weight:600;letter-spacing:0}
+.card .body{padding:16px}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 16px}
+.fact{min-width:0}
+.fact dt{font-size:12px;color:var(--ink-faint);margin-bottom:2px}
+.fact dd{margin:0;font-size:14.5px;word-break:break-word}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:4px}
+.field input,.field select,.field textarea{
+  width:100%;padding:8px 10px;border:1px solid var(--rule-strong);
+  border-radius:var(--radius);background:var(--panel-2);
+}
+.field textarea{resize:vertical;min-height:62px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.notice{
+  border-left:3px solid var(--ochre);background:var(--ochre-wash);
+  padding:10px 12px;font-size:13.5px;border-radius:0 var(--radius) var(--radius) 0;margin-bottom:12px;
+}
+.notice.warn{border-color:var(--magenta);background:var(--magenta-wash)}
+.notice.go{border-color:var(--pine);background:var(--pine-wash)}
+
+/* ---------- timeline spine ---------- */
+.spine{padding:6px 16px 16px}
+.step{display:grid;grid-template-columns:34px 1fr;gap:14px;position:relative;padding:12px 0}
+.step::before{
+  content:"";position:absolute;left:16px;top:0;bottom:0;width:1px;background:var(--rule);
+}
+.step:first-child::before{top:22px}
+.step:last-child::before{bottom:calc(100% - 22px)}
+.knob{
+  grid-column:1;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  background:var(--panel);border:1px solid var(--rule-strong);position:relative;z-index:1;
+  font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:13px;color:var(--ink-faint);
+}
+.step.done .knob{background:var(--pine);border-color:var(--pine);color:#fff}
+.step.now .knob{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.step.skip .knob{opacity:.5;border-style:dashed}
+.step h4{font-size:14.5px;font-weight:600;margin:6px 0 2px;font-family:inherit}
+.step.todo h4{color:var(--ink-faint)}
+.step .when{font-size:12.5px;color:var(--ink-faint);font-variant-numeric:tabular-nums}
+.substeps{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:5px}
+.substeps li{
+  font-size:12px;padding:2px 8px;border-radius:99px;border:1px solid var(--rule);color:var(--ink-faint);
+}
+.substeps li.hit{border-color:var(--pine);color:var(--pine);background:var(--pine-wash)}
+.substeps li.cur{background:var(--ink);border-color:var(--ink);color:var(--ground);font-weight:600}
+
+.log{list-style:none;margin:0;padding:0}
+.log li{padding:11px 16px;border-bottom:1px solid var(--rule);font-size:13.5px}
+.log li:last-child{border-bottom:0}
+.log .meta{color:var(--ink-faint);font-size:12px;font-variant-numeric:tabular-nums;margin-top:2px}
+.log .note{color:var(--ink-soft);margin-top:3px}
+
+/* ---------- track view ---------- */
+.track-hero{max-width:640px;margin:0 auto;padding:44px 0 10px;text-align:center}
+.track-hero h1{font-size:clamp(25px,4vw,36px);line-height:1.1}
+.track-hero p{color:var(--ink-soft);margin:10px 0 24px}
+.track-form{display:flex;gap:8px;max-width:440px;margin:0 auto}
+.track-form input{flex:1;padding:11px 13px;border:1px solid var(--rule-strong);border-radius:var(--radius);background:var(--panel)}
+.track-result{max-width:720px;margin:26px auto 0}
+.miss{text-align:center;color:var(--magenta);font-size:14px;margin-top:14px}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px}
+
+/* ---------- metabase import ---------- */
+.mb{margin-top:16px;border:1px solid var(--rule-strong);border-radius:var(--radius);background:var(--panel);box-shadow:var(--shadow);overflow:hidden}
+.mb-head{display:flex;align-items:center;gap:10px;padding:12px 16px;flex-wrap:wrap}
+.mb-head h3{font-size:14px;font-weight:600;letter-spacing:0;padding:0;border:0}
+.mb-head .when{font-size:12.5px;color:var(--ink-faint);font-variant-numeric:tabular-nums;margin-left:auto}
+.mb-count{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 7px;border-radius:99px;background:var(--cyan);color:#fff;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.mb-count.none{background:var(--rule-strong);color:var(--ink-soft)}
+.mb-body{border-top:1px solid var(--rule);max-height:380px;overflow-y:auto}
+.mb-row{display:flex;gap:12px;align-items:center;padding:11px 16px;border-bottom:1px solid var(--rule)}
+.mb-row:last-child{border-bottom:0}
+.mb-row .who{flex:1;min-width:0}
+.mb-row .who b{font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.mb-msg{padding:14px 16px;font-size:13.5px;color:var(--ink-soft);border-top:1px solid var(--rule)}
+.mb-msg.bad{color:var(--magenta)}
+.spin{display:inline-block;width:11px;height:11px;border:2px solid var(--rule-strong);border-top-color:var(--cyan);border-radius:50%;animation:sp .7s linear infinite;vertical-align:-1px;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){.spin{animation:none}}
+
+.foot{color:var(--ink-faint);font-size:12.5px;text-align:center;padding:36px 20px 10px;max-width:60ch;margin:0 auto}
+.hide{display:none!important}
+
+@media (max-width:900px){
+  .detail{grid-template-columns:1fr}
+  .rail{grid-template-columns:repeat(3,1fr)}
+  .stage{border-bottom:1px solid var(--rule)}
+  .stage:nth-child(3){border-right:0}
+}
+@media (max-width:560px){
+  .rail{grid-template-columns:repeat(2,1fr)}
+  .stage:nth-child(3){border-right:1px solid var(--rule)}
+  .stage:nth-child(even){border-right:0}
+  .facts{grid-template-columns:1fr}
+  .wrap{padding:0 14px 60px}
+  .topbar-in{padding:10px 14px;gap:10px}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <b>Material Depot</b>
+      <span>Wallpaper order line</span>
+    </div>
+    <div class="switch" role="group" aria-label="View">
+      <button id="nav-board" aria-pressed="true">Procurement board</button>
+      <button id="nav-track" aria-pressed="false">Track an order</button>
+    </div>
+    <div class="whoami" id="whoami"><span class="dot off"></span>Connecting…</div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ BOARD ============ -->
+  <section id="view-board">
+    <div class="rail-head">
+      <div>
+        <h1>Six checkpoints, every order</h1>
+        <p>Live count at each stage of the custom wallpaper line. Click a stage to filter the list below.</p>
+      </div>
+      <button class="btn btn-primary" id="btn-new">Add an order</button>
+    </div>
+
+    <div class="rail" id="rail"></div>
+
+    <section class="mb hide" id="mb"></section>
+
+    <div class="toolbar">
+      <div class="search"><input id="q" type="search" placeholder="Search PO, ENQ, customer, design or BM" autocomplete="off"></div>
+      <button class="chip alert" id="chip-attn" aria-pressed="false">Needs attention</button>
+      <button class="chip" id="chip-open" aria-pressed="true">Open orders</button>
+      <button class="chip" id="chip-all" aria-pressed="false">Everything</button>
+    </div>
+
+    <div class="panel">
+      <div class="tablewrap"><table id="tbl">
+        <thead><tr>
+          <th>PO / ENQ</th><th>Customer</th><th>Design &amp; vendor</th>
+          <th>Status</th><th>In stage</th><th>Delivery</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table></div>
+      <div id="board-empty" class="empty hide"></div>
+    </div>
+  </section>
+
+  <!-- ============ ORDER DETAIL ============ -->
+  <section id="view-order" class="hide"></section>
+
+  <!-- ============ TRACK ============ -->
+  <section id="view-track" class="hide">
+    <div class="track-hero">
+      <h1>Where is my wallpaper?</h1>
+      <p>Enter the PO number or enquiry ID from your order confirmation.</p>
+      <div class="track-form">
+        <input id="track-q" type="search" placeholder="PO-1042 or ENQ-8871" autocomplete="off">
+        <button class="btn btn-primary" id="track-go">Track</button>
+      </div>
+      <div id="track-miss" class="miss hide"></div>
+    </div>
+    <div id="track-result" class="track-result"></div>
+  </section>
+
+  <p class="foot" id="foot"></p>
+</main>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   1. The line: six milestones, all 22 statuses from the SOP
+   ============================================================ */
+const STAGES = [
+  { key:"placed",    label:"Order placed",    blurb:"PO number and enquiry ID on record",
+    statuses:["Customer Visited","Design Selected","Order Confirmed","PO Raised"] },
+  { key:"dimensions",label:"Dimensions in",   blurb:"Shared by the BM, or taken on a site audit",
+    statuses:["Measurements Pending","Site Audit Scheduled","Measurements Received","Sent to Procurement","Sent to Vendor"] },
+  { key:"render",    label:"Render shared",   blurb:"Vendor render with the customer for approval",
+    statuses:["Render In Progress","Render Ready","Awaiting Customer Approval","Revision Requested"] },
+  { key:"approved",  label:"Render approved", blurb:"Signed off and on the printer",
+    statuses:["Approved for Printing","Printing","Printed"] },
+  { key:"warehouse", label:"In warehouse",    blurb:"Dispatched by vendor, received by us",
+    statuses:["Dispatched by Vendor","Received at Warehouse","Ready for Delivery"] },
+  { key:"delivery",  label:"Delivery",        blurb:"Out for delivery to the customer",
+    statuses:["Out for Delivery","Delivered"] },
+];
+const ALL_STATUSES = STAGES.flatMap(s => s.statuses);
+// Regular (non-customised) wallpaper skips the render loop entirely.
+const REGULAR_SKIP = ["render","approved"];
+const REGULAR_STATUSES = ALL_STATUSES.filter(st =>
+  !STAGES.filter(s=>REGULAR_SKIP.includes(s.key)).flatMap(s=>s.statuses).includes(st));
+
+const TERMINAL = ["Delivered"];
+const VENDORS = ["Macro Media","Life N Colors","Other vendor"];
+
+// How long a status may sit before the board flags it.
+const PATIENCE = {
+  "Measurements Pending":3, "Site Audit Scheduled":3, "Sent to Vendor":2,
+  "Render In Progress":2, "Awaiting Customer Approval":3, "Revision Requested":2,
+  "Approved for Printing":1, "Printing":3, "Printed":2, "Dispatched by Vendor":4,
+  "Received at Warehouse":3, "Ready for Delivery":3, "Out for Delivery":1,
+};
+const DEFAULT_PATIENCE = 5;
+
+function stageOf(status){ return STAGES.find(s => s.statuses.includes(status)) || STAGES[0]; }
+function stageIndex(status){ return STAGES.indexOf(stageOf(status)); }
+function statusTone(status){
+  if (TERMINAL.includes(status)) return "pine";
+  if (["Awaiting Customer Approval","Revision Requested","Measurements Pending","Site Audit Scheduled"].includes(status)) return "ochre";
+  if (["Printing","Out for Delivery","Render In Progress","Printed","Dispatched by Vendor"].includes(status)) return "cyan";
+  return "";
+}
+
+/* ============================================================
+   2. Small helpers
+   ============================================================ */
+const $  = sel => document.querySelector(sel);
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g, c =>
+  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const nowISO = () => new Date().toISOString();
+
+function fmtDate(iso){
+  if(!iso) return "—";
+  const d = new Date(iso); if (isNaN(d)) return "—";
+  return d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"2-digit"});
+}
+function fmtDateTime(iso){
+  if(!iso) return "—";
+  const d = new Date(iso); if (isNaN(d)) return "—";
+  return d.toLocaleDateString("en-IN",{day:"2-digit",month:"short"}) + ", " +
+         d.toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"});
+}
+function daysSince(iso){
+  if(!iso) return 0;
+  return Math.max(0, Math.floor((Date.now() - new Date(iso).getTime())/86400000));
+}
+function todayStr(){
+  const d = new Date(); const p = n => String(n).padStart(2,"0");
+  return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate());
+}
+function remember(k,v){ try{ localStorage.setItem("mdwp:"+k,v);}catch(e){} }
+function recall(k,d){ try{ const v=localStorage.getItem("mdwp:"+k); return v===null?d:v; }catch(e){ return d; } }
+
+/* The Macro Media cut-off from the SOP. */
+function printingCall(vendor){
+  if (vendor !== "Macro Media") return null;
+  const h = new Date().getHours();
+  return h < 13
+    ? { ok:true,  text:"Approved before 1 PM — Macro Media prints today." }
+    : { ok:false, text:"Approved after 1 PM — Macro Media starts printing tomorrow." };
+}
+
+/* An order needs attention when it has overrun, is on hold, or is late. */
+function attention(o){
+  const out = [];
+  if (o.onHold) out.push("On hold: " + (o.holdReason || "no reason given"));
+  if (o.exception) out.push("Exception: " + o.exception);
+  const patience = PATIENCE[o.status] ?? DEFAULT_PATIENCE;
+  const age = daysSince(o.statusAt);
+  if (!TERMINAL.includes(o.status) && age > patience)
+    out.push(age + " days at “" + o.status + "” — expected " + patience + " or fewer");
+  if (o.deliveryDate && !TERMINAL.includes(o.status) && o.deliveryDate < todayStr())
+    out.push("Committed delivery date of " + fmtDate(o.deliveryDate) + " has passed");
+  if ((o.renderRev||0) >= 3 && stageIndex(o.status) <= 2)
+    out.push("Render revision " + o.renderRev + " — approval loop is not converging");
+  return out;
+}
+
+function statusesFor(o){ return o.flow === "regular" ? REGULAR_STATUSES : ALL_STATUSES; }
+function nextStatus(o){
+  const list = statusesFor(o);
+  const i = list.indexOf(o.status);
+  if (i < 0 || i === list.length-1) return null;
+  // A revision sends the order back to the vendor, it does not move forward.
+  if (o.status === "Revision Requested") return "Render In Progress";
+  return list[i+1];
+}
+
+/* ============================================================
+   3. State + store
+   ============================================================ */
+const state = {
+  db:null, user:null, uid:null,
+  canWrite:null,          // null = not told yet
+  orders:[],              // [{id, ...}]
+  view: location.hash.startsWith("#/track") ? "track" : "board",
+  activeId:null,
+  stageFilter:null,
+  scope: recall("scope","open"),   // open | all | attn
+  q:"",
+  ready:false,
+  mcp:null,
+  mb:{rows:[], at:null, loading:false, error:null, vendor: recall("mbvendor","all")},
+  trackFound:null, trackTried:false,
+};
+
+function setWho(){
+  const el = $("#whoami");
+  if (!state.db){ el.innerHTML = '<span class="dot off"></span>Offline — changes will not save'; return; }
+  if (state.canWrite === false){ el.innerHTML = '<span class="dot ro"></span>Read-only \u2014 tap to sign in'; return; }
+  el.innerHTML = '<span class="dot"></span>Live';
+}
+
+
+/* ============================================================
+   Backend client. Replaces the Claude artifact runtime with the
+   serverless functions in /api. The browser never sees SQL or
+   any Metabase credential: /api/metabase holds both.
+   ============================================================ */
+const API = {
+  key(){ try { return localStorage.getItem("mdwp:key") || ""; } catch(e){ return ""; } },
+  setKey(k){ try { k ? localStorage.setItem("mdwp:key", k) : localStorage.removeItem("mdwp:key"); } catch(e){} },
+  async call(path, opts){
+    opts = opts || {};
+    const res = await fetch(path, Object.assign({}, opts, {
+      headers: Object.assign({"Content-Type":"application/json","x-team-key":API.key()}, opts.headers||{})
+    }));
+    if (!res.ok){
+      const err = new Error("request failed");
+      err.code = res.status === 401 ? "needs_reauth" : "upstream_error";
+      err.retryable = res.status >= 500;
+      try { err.message = (await res.json()).error || err.message; } catch(_){}
+      throw err;
+    }
+    return res.json();
+  }
+};
+
+/* Same shape the app already expects: collection/doc/onSnapshot. */
+function makeStore(){
+  return {
+    collection(){
+      return {
+        onSnapshot(next, fail){
+          let stopped = false, timer = null;
+          const tick = async () => {
+            try {
+              const out = await API.call("/api/orders");
+              if (stopped) return;
+              next({ docs: out.orders.map(o => ({ id: o.id, data: () => o.doc })) });
+            } catch(e){ if (!stopped && fail) fail(e); }
+          };
+          tick();
+          timer = setInterval(tick, 15000);
+          return () => { stopped = true; clearInterval(timer); };
+        },
+        async add(doc){
+          const out = await API.call("/api/orders", {method:"POST", body: JSON.stringify({doc})});
+          return { id: out.id };
+        }
+      };
+    },
+    doc(path){
+      const id = String(path).split("/").pop();
+      const q = "/api/orders?id=" + encodeURIComponent(id);
+      return {
+        async set(body){ await API.call(q, {method:"PUT", body: JSON.stringify({doc:body})}); },
+        async delete(){ await API.call(q, {method:"DELETE"}); }
+      };
+    }
+  };
+}
+
+/* The app calls mcp.callTool(...); here that is one POST. */
+function makeMetabase(){
+  return {
+    async invalidate(){},
+    async callTool(){
+      const out = await API.call("/api/metabase", {method:"POST"});
+      return { payload: { data: { rows: out.rows, cols: out.cols } }, cache: { storedAt: out.at } };
+    }
+  };
+}
+
+function wireSignIn(){
+  const el = $("#whoami");
+  el.style.cursor = "pointer";
+  el.title = "Sign in or out";
+  el.addEventListener("click", () => {
+    const k = prompt(API.key() ? "Team key (leave blank to sign out):" : "Procurement team key:", "");
+    if (k === null) return;
+    API.setKey(k.trim());
+    location.reload();
+  });
+}
+
+async function boot(){
+  wireSignIn();
+  state.db = makeStore();
+  state.canWrite = !!API.key();
+  state.uid = null;
+  state.mcp = API.key() ? makeMetabase() : null;
+  setWho();
+  if (state.mcp){ renderMB(); mbFetch(false); }
+
+  state.db.collection("orders").onSnapshot(snap => {
+    state.orders = snap.docs.map(d => Object.assign({id:d.id}, d.data()));
+    state.ready = true;
+    render();
+  }, err => {
+    state.ready = true;
+    if (err && err.code === "needs_reauth") state.canWrite = false;
+    setWho();
+    render();
+  });
+}
+
+function orderById(id){ return state.orders.find(o=>o.id===id) || null; }
+
+async function saveOrder(id, patch, logEntry){
+  if (!state.db) return false;
+  const o = orderById(id); if (!o) return false;
+  const body = Object.assign({}, o, patch);
+  delete body.id;
+  body.updatedAt = nowISO();
+  if (logEntry){
+    const log = (o.log||[]).slice();
+    log.push(Object.assign({t:nowISO(), by: state.uid || null}, logEntry));
+    body.log = log.slice(-120);
+  }
+  try{
+    await state.db.doc("orders/"+id).set(body);
+    return true;
+  }catch(e){
+    if (e && e.code === "invalid_argument"){
+      state.canWrite = false; setWho(); render();
+      toast("That change was not accepted — your access here is read-only.");
+    } else {
+      toast("Could not save. Try again in a moment.");
+    }
+    return false;
+  }
+}
+
+let toastTimer;
+function toast(msg){
+  let t = $("#toast");
+  if (!t){
+    t = document.createElement("div");
+    t.id = "toast";
+    t.style.cssText = "position:fixed;left:50%;transform:translateX(-50%);bottom:calc(22px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--ground);padding:10px 16px;border-radius:4px;font-size:13.5px;z-index:99;max-width:90vw;text-align:center";
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.display = "block";
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ t.style.display="none"; }, 3200);
+}
+
+const writable = () => state.db && state.canWrite !== false;
+
+/* ============================================================
+   4. Rendering
+   ============================================================ */
+function render(){
+  $("#view-board").classList.toggle("hide", state.view!=="board");
+  $("#view-order").classList.toggle("hide", state.view!=="order");
+  $("#view-track").classList.toggle("hide", state.view!=="track");
+  $("#nav-board").setAttribute("aria-pressed", String(state.view!=="track"));
+  $("#nav-track").setAttribute("aria-pressed", String(state.view==="track"));
+
+  if (state.view==="board") renderBoard();
+  else if (state.view==="order") renderOrder();
+  else renderTrack();
+
+  $("#foot").textContent = state.db
+    ? "Every change here is shared with everyone who opens this page."
+    : "Shared storage is unavailable in this view, so nothing you enter will be kept.";
+}
+
+/* ---- rail ---- */
+function renderRail(){
+  const live = state.orders.filter(o => !TERMINAL.includes(o.status) || daysSince(o.statusAt) < 14);
+  const html = STAGES.map((s,i) => {
+    const at = live.filter(o => stageOf(o.status).key === s.key).length;
+    const past = state.orders.filter(o => stageIndex(o.status) > i).length;
+    const total = Math.max(1, state.orders.length);
+    const pct = Math.round((past / total) * 100);
+    const on = state.stageFilter === s.key;
+    return `<button class="stage" data-stage="${s.key}" aria-pressed="${on}" title="${esc(s.blurb)}">
+      <span class="numeral">${i+1}</span>
+      <span class="nm">${esc(s.label)}</span>
+      <span class="ct ${at?"":"zero"}">${at}</span>
+      <span class="bar"><i style="width:${pct}%"></i></span>
+    </button>`;
+  }).join("");
+  $("#rail").innerHTML = html;
+}
+
+function visibleOrders(){
+  let list = state.orders.slice();
+  if (state.scope === "open") list = list.filter(o => !TERMINAL.includes(o.status));
+  if (state.scope === "attn") list = list.filter(o => attention(o).length);
+  if (state.stageFilter) list = list.filter(o => stageOf(o.status).key === state.stageFilter);
+  const q = state.q.trim().toLowerCase();
+  if (q) list = list.filter(o => [o.po,o.enq,o.customer,o.design,o.bm,o.vendor,o.city]
+    .some(v => String(v||"").toLowerCase().includes(q)));
+  /* Newest order first. The red dot and the Needs attention chip
+     still surface anything overdue, without reordering the list. */
+  list.sort((a,b) =>
+    String(b.createdAt || b.statusAt || "").localeCompare(String(a.createdAt || a.statusAt || "")));
+  return list;
+}
+
+function renderBoard(){
+  renderRail();
+  renderMB();
+  $("#chip-attn").setAttribute("aria-pressed", String(state.scope==="attn"));
+  $("#chip-open").setAttribute("aria-pressed", String(state.scope==="open"));
+  $("#chip-all").setAttribute("aria-pressed",  String(state.scope==="all"));
+  $("#btn-new").disabled = !writable();
+
+  const list = visibleOrders();
+  const tbody = $("#rows"), empty = $("#board-empty");
+
+  if (!state.ready){
+    tbody.innerHTML = "";
+    empty.classList.remove("hide");
+    empty.innerHTML = "<p style='color:var(--ink-soft)'>Loading orders…</p>";
+    return;
+  }
+  if (!list.length){
+    tbody.innerHTML = "";
+    empty.classList.remove("hide");
+    empty.innerHTML = state.orders.length
+      ? `<h3>Nothing matches</h3><p>No order fits the filters you have on. Clear them to see the whole line.</p>
+         <button class="btn" id="btn-clear">Clear filters</button>`
+      : `<h3>The line is empty</h3><p>Bring in Macro Media orders from the panel above, or add one by hand.</p>
+         <button class="btn btn-primary" id="btn-first" ${writable()?"":"disabled"}>Add an order</button>
+         <button class="btn" id="btn-sample" ${writable()?"":"disabled"}>Add a sample order</button>`;
+    return;
+  }
+  empty.classList.add("hide");
+  tbody.innerHTML = list.map(o => {
+    const flags = attention(o);
+    const patience = PATIENCE[o.status] ?? DEFAULT_PATIENCE;
+    const age = daysSince(o.statusAt);
+    const hot = !TERMINAL.includes(o.status) && age > patience;
+    const late = o.deliveryDate && !TERMINAL.includes(o.status) && o.deliveryDate < todayStr();
+    return `<tr data-id="${esc(o.id)}" tabindex="0">
+      <td><span class="code">${flags.length?'<span class="flagdot"></span>':''}${esc(o.po||"PO pending")}</span>
+          <span class="sub">${esc(o.enq||"—")}</span></td>
+      <td>${esc(o.customer||"—")}<span class="sub">${esc(o.city||o.bm||"")}</span></td>
+      <td>${esc(o.design||"—")}<span class="sub">${esc(o.vendor||(o.flow==="regular"?"Regular wallpaper":"Vendor not set"))}</span></td>
+      <td><span class="tag s-${statusTone(o.status)}">${esc(o.status)}</span>
+          <span class="sub">Stage ${stageIndex(o.status)+1} · ${esc(stageOf(o.status).label)}</span></td>
+      <td class="aging ${hot?"hot":""}">${TERMINAL.includes(o.status)?"—":age+"d"}</td>
+      <td class="aging ${late?"hot":""}">${o.deliveryDate?fmtDate(o.deliveryDate):"—"}</td>
+    </tr>`;
+  }).join("");
+}
+
+/* ---- timeline spine, shared by detail and track ---- */
+function spineHTML(o, publicMode){
+  const cur = stageIndex(o.status);
+  return STAGES.map((s,i) => {
+    const skipped = o.flow==="regular" && REGULAR_SKIP.includes(s.key);
+    let cls = "todo";
+    if (skipped) cls = "skip";
+    else if (i < cur) cls = "done";
+    else if (i === cur) cls = "now";
+    const hit = (o.log||[]).filter(l => l.status && stageOf(l.status).key === s.key);
+    const first = hit.length ? hit[0].t : null;
+    const subs = publicMode ? "" : `<ul class="substeps">${s.statuses.map(st=>{
+      const reached = (o.log||[]).some(l=>l.status===st);
+      const isNow = o.status===st;
+      return `<li class="${isNow?"cur":(reached?"hit":"")}">${esc(st)}</li>`;
+    }).join("")}</ul>`;
+    const when = skipped ? "Not part of a regular wallpaper order"
+      : (cls==="done" && first) ? "Reached " + fmtDate(first)
+      : cls==="now" ? "Here now — " + esc(o.status) + " · " + daysSince(o.statusAt) + " days"
+      : "Not yet";
+    return `<div class="step ${cls}">
+      <div class="knob">${cls==="done"?"✓":(i+1)}</div>
+      <div><h4>${esc(s.label)}</h4><div class="when">${when}</div>${subs}</div>
+    </div>`;
+  }).join("");
+}
+
+/* ---- order detail ---- */
+function renderOrder(){
+  const o = orderById(state.activeId);
+  const host = $("#view-order");
+  if (!o){
+    host.innerHTML = `<div class="crumb"><button class="btn btn-sm" data-back>← Board</button></div>
+      <div class="panel empty"><h3>Order not found</h3><p>It may have been removed.</p></div>`;
+    return;
+  }
+  const flags = attention(o);
+  const nxt = nextStatus(o);
+  const w = writable();
+  const call = printingCall(o.vendor);
+  const dims = o.dims || [];
+  const totalSqft = dims.reduce((a,d)=> a + (Number(d.w)||0)*(Number(d.h)||0), 0);
+
+  host.innerHTML = `
+  <div class="crumb">
+    <button class="btn btn-sm" data-back>← Board</button>
+    <h2>${esc(o.po||"PO pending")}</h2>
+    <span class="tag s-${statusTone(o.status)}">${esc(o.status)}</span>
+    <span class="sub" style="margin-left:auto">${esc(o.enq||"")}</span>
+  </div>
+
+  ${flags.length ? `<div class="notice warn"><strong>Needs attention</strong><br>${flags.map(esc).join("<br>")}</div>`:""}
+
+  <div class="detail">
+    <div>
+      <div class="card">
+        <h3>Progress</h3>
+        <div class="spine">${spineHTML(o,false)}</div>
+      </div>
+
+      <div class="card">
+        <h3>History</h3>
+        <ul class="log">${
+          (o.log||[]).slice().reverse().map(l => `<li>
+            <strong>${esc(l.status || l.event || "Updated")}</strong>
+            ${l.note?`<div class="note">${esc(l.note)}</div>`:""}
+            <div class="meta">${fmtDateTime(l.t)}</div>
+          </li>`).join("") || `<li class="note" style="color:var(--ink-faint)">Nothing logged yet.</li>`
+        }</ul>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <h3>Move this order</h3>
+        <div class="body">
+          ${call && o.status==="Approved for Printing" ? `<div class="notice ${call.ok?"go":""}">${esc(call.text)}</div>`:""}
+          ${o.status==="Awaiting Customer Approval" ? `
+            <div class="actions" style="margin-bottom:12px">
+              <button class="btn btn-primary" data-act="approve" ${w?"":"disabled"}>Customer approved</button>
+              <button class="btn" data-act="revise" ${w?"":"disabled"}>Changes requested</button>
+            </div>`:""}
+          <div class="field">
+            <label for="f-status">Status</label>
+            <select id="f-status" ${w?"":"disabled"}>
+              ${statusesFor(o).map(st=>`<option ${st===o.status?"selected":""}>${esc(st)}</option>`).join("")}
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-note">Note for the history (optional)</label>
+            <textarea id="f-note" placeholder="Why it moved, who confirmed, what to watch" ${w?"":"disabled"}></textarea>
+          </div>
+          <div class="actions">
+            ${nxt?`<button class="btn btn-primary" data-act="advance" ${w?"":"disabled"}>Move to “${esc(nxt)}”</button>`:""}
+            <button class="btn" data-act="setstatus" ${w?"":"disabled"}>Save status</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Order</h3>
+        <div class="body">
+          <div class="row2">
+            <div class="field"><label for="f-po">PO number</label><input id="f-po" value="${esc(o.po||"")}" ${w?"":"disabled"}></div>
+            <div class="field"><label for="f-enq">Enquiry ID</label><input id="f-enq" value="${esc(o.enq||"")}" ${w?"":"disabled"}></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label for="f-cust">Customer</label><input id="f-cust" value="${esc(o.customer||"")}" ${w?"":"disabled"}></div>
+            <div class="field"><label for="f-phone">Phone</label><input id="f-phone" value="${esc(o.phone||"")}" ${w?"":"disabled"}></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label for="f-bm">Business manager</label><input id="f-bm" value="${esc(o.bm||"")}" ${w?"":"disabled"}></div>
+            <div class="field"><label for="f-city">Site / city</label><input id="f-city" value="${esc(o.city||"")}" ${w?"":"disabled"}></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label for="f-design">Design</label><input id="f-design" value="${esc(o.design||"")}" ${w?"":"disabled"}></div>
+            <div class="field"><label for="f-vendor">Vendor</label>
+              <input id="f-vendor" value="${esc(o.vendor||"")}" placeholder="Who is making it" ${w?"":"disabled"}></div>
+          </div>
+          <div class="actions"><button class="btn" data-act="savefields" ${w?"":"disabled"}>Save details</button></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Dimensions</h3>
+        <div class="body">
+          <div class="field">
+            <label for="f-dimsrc">Where they came from</label>
+            <select id="f-dimsrc" ${w?"":"disabled"}>
+              ${["Not received yet","Shared by BM","Site audit"].map(s=>`<option ${s===(o.dimsSource||"Not received yet")?"selected":""}>${esc(s)}</option>`).join("")}
+            </select>
+          </div>
+          <div id="dims-list">${
+            (dims.length?dims:[{wall:"",w:"",h:""}]).map((d,i)=>`
+              <div class="row2" style="grid-template-columns:1.4fr 1fr 1fr;gap:8px" data-dim="${i}">
+                <div class="field"><label>Wall</label><input class="d-wall" value="${esc(d.wall||"")}" placeholder="Living room" ${w?"":"disabled"}></div>
+                <div class="field"><label>Width ft</label><input class="d-w" type="number" step="0.01" value="${esc(d.w||"")}" ${w?"":"disabled"}></div>
+                <div class="field"><label>Height ft</label><input class="d-h" type="number" step="0.01" value="${esc(d.h||"")}" ${w?"":"disabled"}></div>
+              </div>`).join("")
+          }</div>
+          <div class="actions">
+            <button class="btn btn-sm" data-act="addwall" ${w?"":"disabled"}>Add a wall</button>
+            <button class="btn btn-sm" data-act="savedims" ${w?"":"disabled"}>Save dimensions</button>
+            <span class="sub" style="align-self:center">${totalSqft?totalSqft.toFixed(2)+" sq ft on record":"Nothing on record"}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Render &amp; delivery</h3>
+        <div class="body">
+          <div class="field"><label for="f-render">Render link from the vendor</label>
+            <input id="f-render" value="${esc(o.renderUrl||"")}" placeholder="Paste the link procurement received" ${w?"":"disabled"}></div>
+          <div class="row2">
+            <div class="field"><label for="f-rev">Revision number</label><input id="f-rev" type="number" min="0" value="${esc(o.renderRev||0)}" ${w?"":"disabled"}></div>
+            <div class="field"><label for="f-deliv">Committed delivery date</label><input id="f-deliv" type="date" value="${esc(o.deliveryDate||"")}" ${w?"":"disabled"}></div>
+          </div>
+          <div class="field"><label for="f-exc">Delivery exception</label>
+            <select id="f-exc" ${w?"":"disabled"}>
+              ${["","Delivery attempted, customer unavailable","Delivery team delay","Warehouse marked received in error","Material damaged in transit"]
+                .map(s=>`<option value="${esc(s)}" ${s===(o.exception||"")?"selected":""}>${s?esc(s):"None"}</option>`).join("")}
+            </select>
+          </div>
+          <div class="actions"><button class="btn" data-act="savedelivery" ${w?"":"disabled"}>Save render &amp; delivery</button></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Hold</h3>
+        <div class="body">
+          <div class="field"><label for="f-hold">Reason the order is paused</label>
+            <input id="f-hold" value="${esc(o.holdReason||"")}" placeholder="Payment pending, site not ready…" ${w?"":"disabled"}></div>
+          <div class="actions">
+            <button class="btn ${o.onHold?"":"btn-danger"}" data-act="togglehold" ${w?"":"disabled"}>${o.onHold?"Take off hold":"Put on hold"}</button>
+            <button class="btn btn-danger btn-sm" data-act="delete" ${w?"":"disabled"}>Delete order</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ---- track view ---- */
+function renderTrack(){
+  const host = $("#track-result");
+  const miss = $("#track-miss");
+  const o = state.trackFound ? orderById(state.trackFound) : null;
+  miss.classList.toggle("hide", !(state.trackTried && !o));
+  if (state.trackTried && !o) miss.textContent = "No order found with that PO number or enquiry ID.";
+  if (!o){ host.innerHTML = ""; return; }
+
+  const stageNow = stageOf(o.status);
+  const nextLine = TERMINAL.includes(o.status)
+    ? "This order is complete."
+    : ({
+        placed:"Next, we confirm the wall dimensions.",
+        dimensions:"Next, the vendor prepares your render.",
+        render:"We are waiting on your approval of the render.",
+        approved:"Your wallpaper is being printed.",
+        warehouse:"Your order is with our warehouse and a delivery date will be confirmed.",
+        delivery:"Your order is on its way."
+      })[stageNow.key];
+
+  host.innerHTML = `
+    <div class="card">
+      <h3>${esc(o.po||"Order")} · ${esc(o.enq||"")}</h3>
+      <div class="body">
+        <div class="facts">
+          <div class="fact"><dt>Customer</dt><dd>${esc(o.customer||"—")}</dd></div>
+          <div class="fact"><dt>Design</dt><dd>${esc(o.design||"—")}</dd></div>
+          <div class="fact"><dt>Current status</dt><dd>${esc(o.status)}</dd></div>
+          <div class="fact"><dt>Expected delivery</dt><dd>${o.deliveryDate?fmtDate(o.deliveryDate):"To be confirmed"}</dd></div>
+        </div>
+        ${o.onHold?`<div class="notice" style="margin-top:14px">This order is paused. Your business manager will be in touch.</div>`:""}
+        <p style="margin:16px 0 0;color:var(--ink-soft)">${esc(nextLine)}</p>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Timeline</h3>
+      <div class="spine">${spineHTML(o,true)}</div>
+    </div>`;
+}
+
+/* ============================================================
+   4b. Metabase — confirmed wallpaper orders by vendor and category
+   ============================================================ */
+const MB_SERVER = "Metabase";
+const MB_DB = 5;
+/* Orders placed on or after this date, newest first. */
+const MB_SINCE = "2026-08-20";
+const MB_SINCE_LABEL = "20 Aug 2026";
+/* Confirmed order states, as the Sales analytics collection defines them.
+   Sourcing moved to the OMS tables in August, so the vendor comes from
+   oms_sales_order_line.source_vendor_id rather than a purchase order. */
+const MB_SQL =
+"SELECT so.zoho_salesorder_number AS order_no,\n" +
+"       e.order_placed_time AS order_placed_at,\n" +
+"       COALESCE(e.lead_id,'') AS enq_id,\n" +
+"       e.estimate_status,\n" +
+"       COALESCE(v.name,'') AS vendor_name,\n" +
+"       ei.category_name AS category,\n" +
+"       trim(concat_ws(' ', c.f_name, c.l_name)) AS customer,\n" +
+"       COALESCE(c.contact::text,'') AS phone,\n" +
+"       COALESCE(c.city,'') AS city,\n" +
+"       trim(concat_ws(' ', b.f_name, b.l_name)) AS bm,\n" +
+"       max(sol.promised_delivery_date)::text AS promised_delivery_date,\n" +
+"       bool_and(COALESCE(sol.availability_confirmed,false)) AS availability_confirmed,\n" +
+"       round(sum(sol.ordered_qty - COALESCE(sol.cancelled_qty,0)),2)::float8 AS sqft,\n" +
+"       count(*)::int AS items,\n" +
+"       min(ei.product_handle) AS design_handle,\n" +
+"       bool_or(ei.product_handle ILIKE '%customized-size%') AS is_custom\n" +
+"FROM oms_sales_order_line sol\n" +
+"JOIN oms_sales_order so ON so.id = sol.salesorder_id\n" +
+"JOIN estimate_items ei ON ei.id = sol.estimate_item_id AND COALESCE(ei.is_deleted,false)=false\n" +
+"JOIN estimate e ON e.id = so.estimate_id\n" +
+"JOIN vendor v ON v.id = sol.source_vendor_id\n" +
+"LEFT JOIN users_user c ON c.id = e.client_id\n" +
+"LEFT JOIN users_user b ON b.id = e.assigned_to_id\n" +
+"WHERE ei.category_name = 'Wallpapers'\n" +
+"  AND ei.category_name NOT IN ('Installation','Site Audit')\n" +
+"  AND e.estimate_status IN ('order_placed','order_confirmed','shipped','partly_shipped','partly_delivered','delivered')\n" +
+"  AND (v.name ILIKE '%MACRO MEDIA%' OR v.name ILIKE '%LIFE N COLORS%')\n" +
+"  AND e.order_placed_time >= TIMESTAMP '" + MB_SINCE + " 00:00:00'\n" +
+"GROUP BY 1,2,3,4,5,6,7,8,9,10\n" +
+"ORDER BY e.order_placed_time DESC";
+
+const NO_VENDOR = "Not sourced yet";
+
+/* The vendor's several company records collapse to the name procurement uses. */
+function vendorLabel(name){
+  const n = String(name||"").trim();
+  if (!n) return NO_VENDOR;
+  if (/macro\s*media/i.test(n)) return "Macro Media";
+  if (/life\s*n\s*colors/i.test(n)) return "Life N Colors";
+  return n;
+}
+
+/* Product handles carry the design name before the word "wallpaper". */
+function prettyDesign(handle){
+  if (!handle) return "";
+  const stem = String(handle).replace(/-wallpaper.*$/i,"");
+  return stem.split("-").filter(Boolean)
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+}
+
+function mbRows(payload){
+  const d = payload && payload.data;
+  if (!d || !Array.isArray(d.rows) || !Array.isArray(d.cols)) return null;
+  const names = d.cols.map(c => c && c.name);
+  return d.rows.map(r => {
+    const o = {};
+    names.forEach((n,i) => { if (n) o[n] = r[i]; });
+    return o;
+  });
+}
+
+function mbErrorText(code, msg){
+  switch(code){
+    case "needs_reauth":
+      return "Metabase needs signing in again. Reconnect it in claude.ai Settings → Connectors, then refresh.";
+    case "server_not_connected":
+      return "Metabase is not connected on your account. Add it in claude.ai Settings → Connectors.";
+    case "selection_required":
+      return "You have more than one Metabase connector. Choose one when Claude asks, then refresh.";
+    case "not_in_manifest":
+      return "Metabase is switched off for this page on your account, so orders have to be added by hand.";
+    case "blocked_by_policy":
+      return "Your organisation blocks this Metabase query.";
+    case "approval_required":
+      return "This query needs a per-call approval that pages cannot ask for yet.";
+    case "server_not_found":
+      return "That Metabase connector no longer exists.";
+    case "tool_error":
+      return "Metabase ran the query and reported an error. " + (msg || "");
+    case "cancelled":
+      return "The Metabase query was cancelled.";
+    case "not_granted":
+    case "capability_disabled":
+    case "capability_removed":
+      return "This view cannot reach connectors, so orders have to be added by hand.";
+    default:
+      return "Metabase did not answer. Try again in a moment.";
+  }
+}
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+async function mbFetch(force){
+  const mcp = state.mcp;
+  if (!mcp) return;
+  state.mb.loading = true; state.mb.error = null; renderMB();
+  if (force){ try { await mcp.invalidate(MB_SERVER, "execute_sql"); } catch(e){} }
+
+  for (let attempt = 0; attempt < 2; attempt++){
+    try {
+      const res = await mcp.callTool(MB_SERVER, "execute_sql", {database_id: MB_DB, sql: MB_SQL});
+      const rows = mbRows(res && res.payload);
+      if (!rows){
+        state.mb.error = {text:"Metabase answered with something this page could not read."};
+      } else {
+        state.mb.rows = rows;
+        state.mb.at = (res.cache && res.cache.storedAt) || nowISO();
+        state.mb.error = null;
+      }
+      break;
+    } catch(e){
+      const code = (e && e.code) || "upstream_error";
+      if (e && e.retryable && attempt === 0){
+        await sleep(Math.min(e.retryAfterMs || 1200, 5000) + Math.random()*400);
+        continue;
+      }
+      state.mb.error = {code:code, text: mbErrorText(code, e && e.message)};
+      break;
+    }
+  }
+  state.mb.loading = false;
+  renderMB();
+}
+
+/* One enquiry can be split across vendors, so identity is order plus vendor. */
+function mbKey(orderNo, vendor){
+  return String(orderNo||"").toUpperCase() + "|" + vendorLabel(vendor);
+}
+function orderKey(o){
+  return String(o.po||"").toUpperCase() + "|" + (o.vendor || NO_VENDOR);
+}
+
+/* Every vendor present in the pulled rows, for the filter chips. */
+function mbVendors(){
+  const seen = [];
+  state.mb.rows.forEach(r => {
+    const v = vendorLabel(r.vendor_name);
+    if (seen.indexOf(v) === -1) seen.push(v);
+  });
+  return seen.sort();
+}
+
+/* Rows not on the board yet, newest order first. */
+function mbNew(){
+  const have = new Set(state.orders.map(orderKey));
+  const v = state.mb.vendor;
+  return state.mb.rows
+    .filter(r => r.order_no && !have.has(mbKey(r.order_no, r.vendor_name)))
+    .filter(r => v === "all" || vendorLabel(r.vendor_name) === v)
+    .sort((a,b) => String(b.order_placed_at||"").localeCompare(String(a.order_placed_at||"")));
+}
+
+function mbDoc(r){
+  const placed = r.order_placed_at || nowISO();
+  const design = prettyDesign(r.design_handle);
+  const sqft   = Number(r.sqft) || 0;
+  const vendor = vendorLabel(r.vendor_name);
+  const sourced = vendor !== NO_VENDOR;
+  const custom = r.is_custom === true;
+  const confirmed = r.availability_confirmed === true;
+
+  const status = !sourced ? "Order Confirmed"
+               : confirmed ? "Sent to Vendor"
+               : "Sent to Procurement";
+
+  const log = [
+    {t:placed, status:"Order Confirmed",
+     note:"Order placed. Enquiry " + (r.enq_id || "not recorded") +
+          ", state " + (r.estimate_status || "confirmed") + "."}
+  ];
+  if (sqft) log.push({t:placed, status:"Measurements Received",
+    note: sqft + " sq ft on the order across " + (r.items||1) + " line(s)."});
+  if (sourced) log.push({t:placed, status:status,
+    note:"Sourced to " + vendor + (confirmed ? ", availability confirmed." : ", availability not confirmed yet.")});
+
+  return {
+    po: String(r.order_no||""),
+    enq: String(r.enq_id||""),
+    customer: String(r.customer||""),
+    phone: String(r.phone||""),
+    bm: String(r.bm||""),
+    city: String(r.city||""),
+    design: design,
+    vendor: vendor,
+    flow: custom ? "custom" : "regular",
+    status: status,
+    statusAt: placed,
+    dims: [],
+    sqft: sqft,
+    dimsSource: "On the order",
+    dimsSharedAt: placed,
+    renderUrl: "", renderRev: 0,
+    deliveryDate: r.promised_delivery_date ? String(r.promised_delivery_date).slice(0,10) : "",
+    exception: "", onHold: false, holdReason: "",
+    createdAt: placed, updatedAt: nowISO(),
+    source: {system:"metabase", orderNo:String(r.order_no||""), enqId:String(r.enq_id||""),
+             vendor:vendor, category:String(r.category||"Wallpapers"),
+             estimateStatus:String(r.estimate_status||""), custom:custom,
+             orderPlacedAt:placed, syncedAt: nowISO()},
+    log: log
+  };
+}
+
+async function mbImport(rows){
+  if (!writable() || !state.db) return 0;
+  let done = 0;
+  for (const r of rows.slice(0, 25)){
+    try {
+      await state.db.collection("orders").add(mbDoc(r));
+      done++;
+    } catch(e){
+      toast(e && e.code === "quota_exceeded"
+        ? "The order store is full. Delete some completed orders first."
+        : "Could not bring in " + (r.order_no||"an order") + ".");
+      break;
+    }
+  }
+  return done;
+}
+
+function renderMB(){
+  const host = $("#mb");
+  if (!state.mcp){ host.classList.add("hide"); return; }
+  host.classList.remove("hide");
+
+  const fresh = state.mb.rows.length ? mbNew() : [];
+  const w = writable();
+  const chips = ["all"].concat(mbVendors());
+
+  const head =
+    '<div class="mb-head">' +
+      '<h3>Confirmed wallpaper orders</h3>' +
+      '<span class="mb-count ' + (fresh.length?"":"none") + '">' + fresh.length + '</span>' +
+      chips.map(v =>
+        '<button class="chip" data-mb="vendor" data-v="' + esc(v) + '" aria-pressed="' +
+        (state.mb.vendor===v) + '">' + (v==="all"?"All vendors":esc(v)) + '</button>').join("") +
+      (fresh.length ? '<button class="btn btn-sm btn-primary" data-mb="all" ' + (w?"":"disabled") + '>Bring in all ' + fresh.length + '</button>' : '') +
+      '<button class="btn btn-sm" data-mb="refresh">' + (state.mb.loading ? '<span class="spin"></span>Checking' : 'Check now') + '</button>' +
+      '<span class="when">' + (state.mb.at ? "Checked " + fmtDateTime(state.mb.at) : "Placed since " + MB_SINCE_LABEL) + '</span>' +
+    '</div>';
+
+  let body = "";
+  if (state.mb.error){
+    body = '<div class="mb-msg bad">' + esc(state.mb.error.text) + '</div>';
+  } else if (state.mb.loading && !state.mb.rows.length){
+    body = '<div class="mb-msg"><span class="spin"></span>Reading orders…</div>';
+  } else if (!state.mb.rows.length){
+    body = '<div class="mb-msg">Nothing read yet. Choose Check now to look for wallpaper orders placed since ' + MB_SINCE_LABEL + '.</div>';
+  } else if (!fresh.length){
+    body = '<div class="mb-msg">Every wallpaper order placed since ' + MB_SINCE_LABEL + ' is already on the board.</div>';
+  } else {
+    body = '<div class="mb-body">' + fresh.slice(0,40).map(r =>
+      '<div class="mb-row">' +
+        '<div class="who">' +
+          '<b>' + esc(r.order_no) + '</b> <span class="sub" style="display:inline">' +
+          fmtDateTime(r.order_placed_at) + '</span>' +
+          '<span class="sub">' + esc(r.customer || "Customer not named") + ' · ' + esc(vendorLabel(r.vendor_name)) +
+          ' · ' + (r.is_custom ? "customised" : "regular") +
+          ' · ' + esc(String(r.sqft||0)) + ' sq ft · ' + esc(r.estimate_status||"") +
+          (r.promised_delivery_date ? ' · promised ' + fmtDate(r.promised_delivery_date) : '') + '</span>' +
+        '</div>' +
+        '<button class="btn btn-sm" data-mb="one" data-k="' + esc(mbKey(r.order_no, r.vendor_name)) + '" ' + (w?"":"disabled") + '>Bring in</button>' +
+      '</div>').join("") + '</div>' +
+      (fresh.length > 40 ? '<div class="mb-msg">Showing the 40 most recent of ' + fresh.length + '.</div>' : '');
+  }
+  host.innerHTML = head + body;
+}
+
+/* ============================================================
+   5. Events
+   ============================================================ */
+function go(view, id){
+  state.view = view;
+  if (id) state.activeId = id;
+  if (view==="track") location.hash = "#/track";
+  else if (view==="order") location.hash = "#/o/"+id;
+  else location.hash = "#/board";
+  window.scrollTo({top:0});
+  render();
+}
+
+$("#nav-board").onclick = () => go(state.activeId && state.view==="order" ? "order" : "board");
+$("#nav-track").onclick = () => go("track");
+
+$("#rail").addEventListener("click", e => {
+  const b = e.target.closest("[data-stage]"); if(!b) return;
+  state.stageFilter = state.stageFilter === b.dataset.stage ? null : b.dataset.stage;
+  if (state.stageFilter && state.scope==="attn") state.scope = "open";
+  render();
+});
+$("#q").addEventListener("input", e => { state.q = e.target.value; renderBoard(); });
+$("#chip-attn").onclick = () => { state.scope = state.scope==="attn"?"open":"attn"; remember("scope",state.scope); render(); };
+$("#chip-open").onclick = () => { state.scope="open"; remember("scope","open"); render(); };
+$("#chip-all").onclick  = () => { state.scope="all";  remember("scope","all");  render(); };
+
+$("#mb").addEventListener("click", async e => {
+  const btn = e.target.closest("[data-mb]"); if(!btn) return;
+  const act = btn.dataset.mb;
+  btn.disabled = true;
+  try{
+    if (act === "refresh"){ await mbFetch(true); return; }
+    if (act === "vendor"){
+      state.mb.vendor = btn.dataset.v;
+      remember("mbvendor", state.mb.vendor);
+      return;
+    }
+    if (act === "all"){
+      const n = await mbImport(mbNew());
+      if (n) toast(n + " order" + (n>1?"s":"") + " brought in.");
+    }
+    if (act === "one"){
+      const k = btn.dataset.k;
+      const row = state.mb.rows.find(r => mbKey(r.order_no, r.vendor_name) === k);
+      if (row){
+        const n = await mbImport([row]);
+        if (n) toast(row.order_no + " brought in.");
+      }
+    }
+  } finally {
+    btn.disabled = false;
+    renderMB();
+  }
+});
+
+$("#rows").addEventListener("click", e => {
+  const tr = e.target.closest("tr[data-id]"); if(!tr) return;
+  go("order", tr.dataset.id);
+});
+$("#rows").addEventListener("keydown", e => {
+  if (e.key!=="Enter") return;
+  const tr = e.target.closest("tr[data-id]"); if(!tr) return;
+  go("order", tr.dataset.id);
+});
+
+$("#board-empty").addEventListener("click", e => {
+  if (e.target.id==="btn-clear"){ state.scope="all"; state.stageFilter=null; state.q=""; $("#q").value=""; render(); }
+  if (e.target.id==="btn-first") newOrder();
+  if (e.target.id==="btn-sample") sampleOrder();
+});
+$("#btn-new").onclick = newOrder;
+
+$("#track-go").onclick = () => { doTrack(); };
+$("#track-q").addEventListener("keydown", e => { if(e.key==="Enter") doTrack(); });
+async function doTrack(){
+  const raw = $("#track-q").value.trim();
+  const q = raw.toLowerCase();
+  state.trackTried = !!raw;
+  let hit = state.orders.find(o =>
+    String(o.po||"").toLowerCase()===q || String(o.enq||"").toLowerCase()===q);
+  if (!hit && raw){
+    try {
+      const res = await fetch("/api/track", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({q: raw})
+      });
+      if (res.ok){
+        const out = await res.json();
+        if (out && out.order){
+          hit = Object.assign({id:"__public__"}, out.order);
+          state.orders = state.orders.concat([hit]);
+        }
+      }
+    } catch(e){}
+  }
+  state.trackFound = hit ? hit.id : null;
+  renderTrack();
+}
+
+/* detail actions */
+$("#view-order").addEventListener("click", async e => {
+  const back = e.target.closest("[data-back]");
+  if (back){ go("board"); return; }
+  const btn = e.target.closest("[data-act]"); if(!btn) return;
+  const o = orderById(state.activeId); if(!o) return;
+  const act = btn.dataset.act;
+  const note = ($("#f-note") && $("#f-note").value.trim()) || "";
+  btn.disabled = true;
+
+  try{
+    if (act==="advance"){
+      const nxt = nextStatus(o);
+      if (nxt) await moveTo(o, nxt, note);
+    }
+    else if (act==="setstatus"){
+      const st = $("#f-status").value;
+      if (st!==o.status) await moveTo(o, st, note);
+      else if (note) await saveOrder(o.id, {}, {status:o.status, note:note});
+    }
+    else if (act==="approve"){
+      await moveTo(o, "Approved for Printing", note || "Customer approved the render.");
+    }
+    else if (act==="revise"){
+      await saveOrder(o.id, {status:"Revision Requested", statusAt:nowISO(), renderRev:(o.renderRev||0)+1},
+        {status:"Revision Requested", note: note || "Customer asked for changes. Revision "+((o.renderRev||0)+1)+" requested from the vendor."});
+    }
+    else if (act==="savefields"){
+      await saveOrder(o.id, {
+        po:$("#f-po").value.trim(), enq:$("#f-enq").value.trim(),
+        customer:$("#f-cust").value.trim(), phone:$("#f-phone").value.trim(),
+        bm:$("#f-bm").value.trim(), city:$("#f-city").value.trim(),
+        design:$("#f-design").value.trim(), vendor:$("#f-vendor").value
+      }, {event:"Order details updated", note:note});
+      toast("Details saved.");
+    }
+    else if (act==="addwall"){
+      const dims = readDims(); dims.push({wall:"",w:"",h:""});
+      await saveOrder(o.id, {dims:dims});
+    }
+    else if (act==="savedims"){
+      const dims = readDims().filter(d => d.wall || d.w || d.h);
+      const src = $("#f-dimsrc").value;
+      const total = dims.reduce((a,d)=>a+(Number(d.w)||0)*(Number(d.h)||0),0);
+      const patch = {dims:dims, dimsSource:src, sqft:Number(total.toFixed(2))};
+      if (src!=="Not received yet" && !o.dimsSharedAt) patch.dimsSharedAt = nowISO();
+      await saveOrder(o.id, patch, {event:"Dimensions updated",
+        note: (note?note+" · ":"") + src + " · " + total.toFixed(2) + " sq ft"});
+      toast("Dimensions saved.");
+    }
+    else if (act==="savedelivery"){
+      const exc = $("#f-exc").value;
+      await saveOrder(o.id, {
+        renderUrl:$("#f-render").value.trim(),
+        renderRev:Number($("#f-rev").value)||0,
+        deliveryDate:$("#f-deliv").value,
+        exception:exc
+      }, {event:"Render and delivery updated", note: note || (exc||"")});
+      toast("Saved.");
+    }
+    else if (act==="togglehold"){
+      const on = !o.onHold;
+      await saveOrder(o.id, {onHold:on, holdReason:$("#f-hold").value.trim()},
+        {event: on?"Put on hold":"Taken off hold", note:$("#f-hold").value.trim()});
+    }
+    else if (act==="delete"){
+      if (confirm("Delete this order permanently? The history goes with it.")){
+        await state.db.doc("orders/"+o.id).delete();
+        go("board");
+        return;
+      }
+    }
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+function readDims(){
+  return Array.from(document.querySelectorAll("#dims-list [data-dim]")).map(row => ({
+    wall: row.querySelector(".d-wall").value.trim(),
+    w: row.querySelector(".d-w").value,
+    h: row.querySelector(".d-h").value
+  }));
+}
+
+async function moveTo(o, status, note){
+  const patch = {status:status, statusAt:nowISO()};
+  if (status==="Delivered") patch.deliveredOn = nowISO();
+  if (status==="Approved for Printing"){
+    const call = printingCall(o.vendor);
+    if (call) note = (note?note+" · ":"") + call.text;
+  }
+  if (TERMINAL.includes(status)) patch.exception = "";
+  const ok = await saveOrder(o.id, patch, {status:status, note:note});
+  if (ok){
+    const el = $("#f-note"); if (el) el.value = "";
+    toast("Moved to " + status + ".");
+  }
+}
+
+/* new order */
+async function newOrder(){
+  if (!writable()) return;
+  const po = prompt("PO number for this order (you can add it later):","");
+  if (po===null) return;
+  const enq = prompt("Enquiry ID:","") || "";
+  const customer = prompt("Customer name:","") || "";
+  const flow = confirm("Is this a CUSTOMISED wallpaper order?\n\nOK = customised   ·   Cancel = regular") ? "custom" : "regular";
+  const status = "PO Raised";
+  const doc = {
+    po: (po||"").trim(), enq: enq.trim(), customer: customer.trim(),
+    phone:"", bm:"", city:"", design:"", vendor:"", flow:flow,
+    status:status, statusAt:nowISO(), dims:[], dimsSource:"Not received yet",
+    renderUrl:"", renderRev:0, deliveryDate:"", exception:"", onHold:false, holdReason:"",
+    createdAt:nowISO(), updatedAt:nowISO(),
+    log:[{t:nowISO(), status:status, note:"Order created.", by:state.uid||null}]
+  };
+  try{
+    const ref = await state.db.collection("orders").add(doc);
+    go("order", ref.id);
+  }catch(e){
+    toast(e && e.code==="quota_exceeded" ? "The order store is full. Delete some completed orders first." : "Could not create the order.");
+  }
+}
+
+async function sampleOrder(){
+  if (!writable()) return;
+  const t = Date.now();
+  const doc = {
+    po:"PO-1001", enq:"ENQ-5501", customer:"Sample customer", phone:"", bm:"Sample BM",
+    city:"Bengaluru", design:"Botanical Grove", vendor:"Macro Media", flow:"custom",
+    status:"Awaiting Customer Approval", statusAt:new Date(t-2*86400000).toISOString(),
+    dims:[{wall:"Living room feature wall",w:"12",h:"9"}], dimsSource:"Site audit",
+    dimsSharedAt:new Date(t-5*86400000).toISOString(), sqft:108,
+    renderUrl:"", renderRev:1, deliveryDate:"", exception:"", onHold:false, holdReason:"",
+    createdAt:new Date(t-7*86400000).toISOString(), updatedAt:nowISO(),
+    log:[
+      {t:new Date(t-7*86400000).toISOString(), status:"PO Raised", note:"Sample order — delete it once you are done looking around."},
+      {t:new Date(t-5*86400000).toISOString(), status:"Measurements Received", note:"Site audit team measured one wall."},
+      {t:new Date(t-3*86400000).toISOString(), status:"Sent to Vendor", note:"Artwork and dimensions sent to Macro Media."},
+      {t:new Date(t-2*86400000).toISOString(), status:"Awaiting Customer Approval", note:"Render shared with the BM."}
+    ]
+  };
+  try{
+    const ref = await state.db.collection("orders").add(doc);
+    go("order", ref.id);
+  }catch(e){ toast("Could not add the sample order."); }
+}
+
+/* hash routing */
+window.addEventListener("hashchange", () => {
+  const h = location.hash;
+  if (h.startsWith("#/o/")){ state.activeId = h.slice(4); state.view="order"; }
+  else if (h.startsWith("#/track")) state.view="track";
+  else state.view="board";
+  render();
+});
+if (location.hash.startsWith("#/o/")){ state.activeId = location.hash.slice(4); state.view="order"; }
+
+render();
+boot();
+})();
+</script>
+</body>
+</html>
